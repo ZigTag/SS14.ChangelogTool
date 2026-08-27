@@ -7,7 +7,7 @@ using SS14.ChangelogTool.Options;
 namespace SS14.ChangelogTool.Clients;
 
 /// <inheritdoc/>
-public class GithubGraphQLClient(IGraphQLClient graphQlClient, IOptions<ChangelogToolOptions> options) : IGithubGraphQLClient
+public class GithubGraphQLClient(IGraphQLClient graphQlClient, IOptions<ChangelogToolOptions> options) : INetworkGitRepositoryClient
 {
     public const string GithubGraphQLApiBase = "https://api.github.com/graphql";
 

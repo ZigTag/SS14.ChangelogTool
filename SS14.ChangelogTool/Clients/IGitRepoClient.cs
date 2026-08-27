@@ -5,7 +5,7 @@ namespace SS14.ChangelogTool.Clients;
 /// <summary>
 /// Wrapper for extracting GitHub data through GraphQL API.
 /// </summary>
-public interface IGithubGraphQLClient
+public interface INetworkGitRepositoryClient
 {
     /// <summary>
     /// Extracts pull requests that have merge date greater, then provided date.

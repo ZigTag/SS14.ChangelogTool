@@ -1,4 +1,4 @@
-﻿using GraphQL.Client.Abstractions;
+using GraphQL.Client.Abstractions;
 using GraphQL.Client.Http;
 using GraphQL.Client.Serializer.SystemTextJson;
 using Microsoft.Extensions.Configuration;
@@ -42,9 +42,30 @@ public static class Registry
         });
         services.AddSingleton<IChangelogFileManager, ChangelogFileManager>();
         services.AddSingleton<IPullRequestParserService, ChangelogParserService>();
-        services.AddSingleton<IGitHubPullRequestService, GitHubPullRequestService>();
+        services.AddSingleton<IPullRequestService, GitHubPullRequestService>();
         services.AddSingleton<ILocalGitRepository, LocalGitRepository>();
-        services.AddSingleton<IGithubGraphQLClient, GithubGraphQLClient>();
+        
+        # region Pull Request Clients
+        
+        services.AddSingleton<INetworkGitRepositoryClient>(sp =>
+        {
+            var options = sp.GetRequiredService<IOptions<ChangelogToolOptions>>();
+
+            switch (options.Value.PrProvider)
+            {
+                case PullRequestProvider.GitHub:
+                    var graphql = sp.GetRequiredService<IGraphQLClient>();
+                    return new GithubGraphQLClient(graphql, options);
+                case PullRequestProvider.Forgejo:
+                    var clientFactory = sp.GetRequiredService<IHttpClientFactory>();
+                    var client = clientFactory.CreateClient(nameof(ForgejoPullRequestClient));
+                    return new ForgejoPullRequestClient(client, options);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        });
+        
+        # endregion
 
         #region clients of different flavours
 

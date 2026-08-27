@@ -11,11 +11,11 @@ namespace SS14.ChangelogTool.Services;
 
 /// <inheritdoc/>
 public partial class GitHubPullRequestService(
-    IGithubGraphQLClient ghGraphQlClient,
+    INetworkGitRepositoryClient ghGraphQlClient,
     ILocalGitRepository repository,
     IOptions<ChangelogToolOptions> options,
     ILogger<GitHubPullRequestService> logger
-) : IGitHubPullRequestService
+) : IPullRequestService
 {
     private readonly ChangelogToolOptions _options = options.Value;
 
