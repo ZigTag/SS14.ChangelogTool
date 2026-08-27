@@ -40,8 +40,8 @@ public class EndToEndPipelineTest(ITestOutputHelper outputHelper) : IDisposable
         SetupLocalRepository(services, lastChangeSha, [new(lastChangeSha, "fgdfgs (#5234)")]);
 
         // Stub out the GitHub service so it doesn't try to make real HTTP calls
-        services.RemoveAll<IGitHubPullRequestService>();
-        var ghService = Substitute.For<IGitHubPullRequestService>();
+        services.RemoveAll<IPullRequestService>();
+        var ghService = Substitute.For<IPullRequestService>();
         ghService.GetDiff(lastChangeSha)
                  .Returns(new GitHubDiff(
                      [
@@ -129,8 +129,8 @@ public class EndToEndPipelineTest(ITestOutputHelper outputHelper) : IDisposable
         services.AddSingleton(repo);
 
         // Stub out the GitHub service so it doesn't try to make real HTTP calls
-        services.RemoveAll<IGitHubPullRequestService>();
-        var ghService = Substitute.For<IGitHubPullRequestService>();
+        services.RemoveAll<IPullRequestService>();
+        var ghService = Substitute.For<IPullRequestService>();
         ghService.GetDiff(fixedSha)
                  .Returns(new GitHubDiff(
                      [
@@ -212,8 +212,8 @@ public class EndToEndPipelineTest(ITestOutputHelper outputHelper) : IDisposable
         const string lastChangeSha = "last-change-sha";
         SetupLocalRepository(services, lastChangeSha, [new("some-sha", "fgdfgs (#5234)")]);
 
-        services.RemoveAll<IGitHubPullRequestService>();
-        var ghService = Substitute.For<IGitHubPullRequestService>();
+        services.RemoveAll<IPullRequestService>();
+        var ghService = Substitute.For<IPullRequestService>();
         ghService.GetDiff(lastChangeSha)
                  .Returns(new GitHubDiff(
                      [
@@ -309,8 +309,8 @@ public class EndToEndPipelineTest(ITestOutputHelper outputHelper) : IDisposable
         const string lastChangeSha = "last-change-sha";
         SetupLocalRepository(services, lastChangeSha, [new("some-sha", "fgdfgs (#5234)")]);
 
-        services.RemoveAll<IGitHubPullRequestService>();
-        var ghService = Substitute.For<IGitHubPullRequestService>();
+        services.RemoveAll<IPullRequestService>();
+        var ghService = Substitute.For<IPullRequestService>();
         ghService.GetDiff(lastChangeSha)
                  .Returns(new GitHubDiff(
                      [
@@ -412,8 +412,8 @@ public class EndToEndPipelineTest(ITestOutputHelper outputHelper) : IDisposable
         const string lastChangeSha = "last-change-sha";
         SetupLocalRepository(services, lastChangeSha, [new("some-sha", "fgdfgs (#5234)")]);
 
-        services.RemoveAll<IGitHubPullRequestService>();
-        var ghService = Substitute.For<IGitHubPullRequestService>();
+        services.RemoveAll<IPullRequestService>();
+        var ghService = Substitute.For<IPullRequestService>();
         ghService.GetDiff(lastChangeSha)
                  .Returns(new GitHubDiff(
                      [
@@ -470,8 +470,8 @@ public class EndToEndPipelineTest(ITestOutputHelper outputHelper) : IDisposable
         const string lastChangeSha = "last-change-sha";
         SetupLocalRepository(services, lastChangeSha, [new("some-sha", "fgdfgs (#5234)")]);
 
-        services.RemoveAll<IGitHubPullRequestService>();
-        var ghService = Substitute.For<IGitHubPullRequestService>();
+        services.RemoveAll<IPullRequestService>();
+        var ghService = Substitute.For<IPullRequestService>();
         ghService.GetDiff(lastChangeSha)
                  .Returns(new GitHubDiff(
                      [
@@ -532,8 +532,8 @@ public class EndToEndPipelineTest(ITestOutputHelper outputHelper) : IDisposable
         const string lastChangeSha = "last-change-sha";
         SetupLocalRepository(services, lastChangeSha, [new("some-sha", "fgdfgs (#5234)")]);
 
-        services.RemoveAll<IGitHubPullRequestService>();
-        var ghService = Substitute.For<IGitHubPullRequestService>();
+        services.RemoveAll<IPullRequestService>();
+        var ghService = Substitute.For<IPullRequestService>();
         ghService.GetDiff(lastChangeSha)
                  .Returns(new GitHubDiff(
                      [
@@ -583,8 +583,8 @@ public class EndToEndPipelineTest(ITestOutputHelper outputHelper) : IDisposable
         const string lastChangeSha = "last-change-sha";
         SetupLocalRepository(services, lastChangeSha, [new("some-sha", "fgdfgs (#5234)")]);
 
-        services.RemoveAll<IGitHubPullRequestService>();
-        var ghService = Substitute.For<IGitHubPullRequestService>();
+        services.RemoveAll<IPullRequestService>();
+        var ghService = Substitute.For<IPullRequestService>();
         ghService.GetDiff(lastChangeSha)
                  .Returns(new GitHubDiff(
                      [],
@@ -620,8 +620,8 @@ public class EndToEndPipelineTest(ITestOutputHelper outputHelper) : IDisposable
         const string lastChangeSha = "last-change-sha";
         SetupLocalRepository(services, lastChangeSha, [new("some-sha", "fgdfgs (#5234)")]);
 
-        services.RemoveAll<IGitHubPullRequestService>();
-        var ghService = Substitute.For<IGitHubPullRequestService>();
+        services.RemoveAll<IPullRequestService>();
+        var ghService = Substitute.For<IPullRequestService>();
         ghService.GetDiff(lastChangeSha)
                  .Returns(new GitHubDiff(
                      [],
@@ -659,8 +659,8 @@ public class EndToEndPipelineTest(ITestOutputHelper outputHelper) : IDisposable
         OverrideOptions(services);
 
         // Stub out the GitHub service
-        services.RemoveAll<IGitHubPullRequestService>();
-        var ghService = Substitute.For<IGitHubPullRequestService>();
+        services.RemoveAll<IPullRequestService>();
+        var ghService = Substitute.For<IPullRequestService>();
         ghService.GetDiff(Arg.Any<string>())
             .Returns(new GitHubDiff(
                 [
@@ -714,8 +714,8 @@ public class EndToEndPipelineTest(ITestOutputHelper outputHelper) : IDisposable
 
         OverrideOptions(services, extraCategories: "Admin");
 
-        services.RemoveAll<IGitHubPullRequestService>();
-        var ghService = Substitute.For<IGitHubPullRequestService>();
+        services.RemoveAll<IPullRequestService>();
+        var ghService = Substitute.For<IPullRequestService>();
         ghService.GetDiff(Arg.Any<string>())
             .Returns(new GitHubDiff(
                 [

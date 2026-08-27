@@ -1,4 +1,4 @@
-﻿using GraphQL;
+using GraphQL;
 using GraphQL.Client.Abstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -12,7 +12,7 @@ public class GithubGraphQLClient(
     IGraphQLClient graphQlClient, 
     IOptions<ChangelogToolOptions> options, 
     ILogger<GithubGraphQLClient> logger
-) : IGithubGraphQLClient
+) : INetworkGitRepositoryClient
 {
     public const string GithubGraphQLApiBase = "https://api.github.com/graphql";
 

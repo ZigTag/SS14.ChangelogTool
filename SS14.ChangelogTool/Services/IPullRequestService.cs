@@ -3,9 +3,9 @@ using SS14.ChangelogTool.Models.GitHub;
 namespace SS14.ChangelogTool.Services;
 
 /// <summary>
-/// Service for interacting with github api.
+/// Service for aggregating pull requests into diffs.
 /// </summary>
-public interface IGitHubPullRequestService
+public interface IPullRequestService
 {
     /// <summary>
     /// Gets the diff (new pull requests and reverted pull request numbers) since the provided commit hash.

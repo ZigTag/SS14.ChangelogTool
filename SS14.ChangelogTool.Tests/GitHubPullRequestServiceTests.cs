@@ -23,13 +23,13 @@ public class GitHubPullRequestServiceTests
     private const string Repo = "space-wizards/space-station-14";
     private const string SinceSha = "base-sha";
 
-    private readonly IGithubGraphQLClient _client;
+    private readonly INetworkGitRepositoryClient _client;
     private readonly ILocalGitRepository _repository;
     private readonly GitHubPullRequestService _cut;
 
     public GitHubPullRequestServiceTests()
     {
-        _client = Substitute.For<IGithubGraphQLClient>();
+        _client = Substitute.For<INetworkGitRepositoryClient>();
         _repository = Substitute.For<ILocalGitRepository>();
 
         _client.GetPullRequests(Arg.Any<string>(), Arg.Any<IReadOnlyCollection<int>>())
