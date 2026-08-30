@@ -1,6 +1,4 @@
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using GraphQL.Client.Abstractions;
 using Microsoft.Extensions.Options;
 using SS14.ChangelogTool.Models.Forgejo;
 using SS14.ChangelogTool.Models.GitHub;
@@ -9,7 +7,7 @@ using SS14.ChangelogTool.Options;
 namespace SS14.ChangelogTool.Clients;
 
 /// <inheritdoc/>
-public class ForgejoPullRequestClient(HttpClient client, IOptions<ChangelogToolOptions> options) : INetworkGitRepositoryClient
+public class ForgejoGitRepositoryClient(HttpClient client, INetworkGitRepositoryClient ghGraphQlClient, IOptions<ChangelogToolOptions> options) : INetworkGitRepositoryClient
 {
     public readonly string ForgejoApiBase = $"https://{options.Value.Host}/api/v1";
 
@@ -34,12 +32,7 @@ public class ForgejoPullRequestClient(HttpClient client, IOptions<ChangelogToolO
 
         foreach (var prNumber in pullRequestNumbers)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{ForgejoApiBase}/repos/{owner}/{repository}/pulls/{prNumber}");
-
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", options.Value.GithubToken);
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            
-            var resp = await client.SendAsync(request);
+            var resp = await client.GetAsync($"{ForgejoApiBase}/repos/{owner}/{repository}/pulls/{prNumber}");
 
             if (!resp.IsSuccessStatusCode)
                 continue;
@@ -53,6 +46,15 @@ public class ForgejoPullRequestClient(HttpClient client, IOptions<ChangelogToolO
         }
         
         return result;
+    }
+
+    // Unfortunately it's hard to broker Forgejo for this, likely most external PRs will come off GitHub. 
+    public async Task<IReadOnlyCollection<(string Sha, string RepoWithOwner)>> GetOwnedBy(IReadOnlyCollection<string> shaListToDiscover)
+    {
+        var ghPrs = (await ghGraphQlClient.GetOwnedBy(shaListToDiscover)).ToDictionary();
+
+        // Assume that any PR that can't be found on GitHub is from the Forgejo repo
+        return [.. shaListToDiscover.Where(val => !ghPrs.ContainsKey(val)).Select(val => (val, options.Value.Repo))];
     }
 
     private static (string repo, string owner) ExtractParts(string repo)

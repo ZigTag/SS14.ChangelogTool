@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Configuration;
 
 namespace SS14.ChangelogTool.Options;
@@ -49,6 +49,13 @@ public sealed class ChangelogToolOptions
     [Required]
     [ConfigurationKeyName("GITHUB_TOKEN")]
     public required string GithubToken { get; set; }
+    
+    /// <summary>
+    /// The external PAT to use. This is needed if you're not using GitHub.
+    /// </summary>
+    [Required]
+    [ConfigurationKeyName("EXTERNAL_TOKEN")]
+    public string ExternalToken { get; set; }
 
     /// <summary>
     /// The discord webhook to use in sending changelog diffs

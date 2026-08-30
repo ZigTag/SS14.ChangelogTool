@@ -13,6 +13,7 @@ using SS14.ChangelogTool.Options;
 using SS14.ChangelogTool.Services;
 using System.CommandLine;
 using System.Net;
+using System.Net.Http.Headers;
 using SS14.ChangelogTool.LocalGit;
 
 namespace SS14.ChangelogTool;
@@ -49,17 +50,21 @@ public static class Registry
         
         services.AddSingleton<INetworkGitRepositoryClient>(sp =>
         {
-            var options = sp.GetRequiredService<IOptions<ChangelogToolOptions>>();
+            var options = sp.GetRequiredService<IOptions<ChangelogToolOptions>>(); 
+            var graphql = sp.GetRequiredService<IGraphQLClient>();
 
+            var ghGraphQlClient = new GithubGraphQLClient(graphql, options);
+            
             switch (options.Value.PrProvider)
             {
                 case PullRequestProvider.GitHub:
-                    var graphql = sp.GetRequiredService<IGraphQLClient>();
-                    return new GithubGraphQLClient(graphql, options);
+                    return ghGraphQlClient;
                 case PullRequestProvider.Forgejo:
                     var clientFactory = sp.GetRequiredService<IHttpClientFactory>();
-                    var client = clientFactory.CreateClient(nameof(ForgejoPullRequestClient));
-                    return new ForgejoPullRequestClient(client, options);
+                    var client = clientFactory.CreateClient(nameof(ForgejoGitRepositoryClient));
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", options.Value.ExternalToken);
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    return new ForgejoGitRepositoryClient(client, ghGraphQlClient, options);
                 default:
                     throw new ArgumentOutOfRangeException();
             }
