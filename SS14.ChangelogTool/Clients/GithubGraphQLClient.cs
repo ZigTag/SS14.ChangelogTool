@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SS14.ChangelogTool.Models.GitHub;
 using SS14.ChangelogTool.Options;
+using SS14.ChangelogTool.Utils;
 
 namespace SS14.ChangelogTool.Clients;
 
@@ -25,7 +26,7 @@ public class GithubGraphQLClient(
         if (pullRequestNumbers.Count == 0)
             return [];
 
-        var (owner, repository) = ExtractParts(repo);
+        var (owner, repository) = GitRepositoryUtils.ExtractParts(repo);
 
         var batchSize = options.Value.MaxPullRequestEntriesInGraphQLRequest;
 
@@ -84,7 +85,7 @@ public class GithubGraphQLClient(
         if (shaAndPrNumber.Count == 0)
             return [];
 
-        var (owner, repository) = ExtractParts(repo);
+        var (owner, repository) = GitRepositoryUtils.ExtractParts(repo);
 
         var chunkSize = options.Value.MaxCommitEntriesInGraphQLRequest;
         var chunks = shaAndPrNumber.DistinctBy(x => x.Sha)
@@ -174,19 +175,5 @@ public class GithubGraphQLClient(
                 + string.Join("; ", response.Errors.Select(e => e.Message))
             );
         }
-    }
-
-    private static (string repo, string owner) ExtractParts(string repo)
-    {
-        var parts = repo.Split('/', 2);
-        if (parts.Length != 2)
-        {
-            throw new InvalidOperationException(
-                $"Attempted to split repo name {repo} into repository name and owner parts, "
-                + $"but splitting by '/' resulted in {parts.Length} parts!"
-            );
-        }
-
-        return (parts[0], parts[1]);
     }
 }

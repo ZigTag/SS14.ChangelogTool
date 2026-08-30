@@ -13,6 +13,7 @@ using SS14.ChangelogTool.Options;
 using SS14.ChangelogTool.Services;
 using System.CommandLine;
 using System.Net;
+using System.Net.Http.Headers;
 using SS14.ChangelogTool.LocalGit;
 
 namespace SS14.ChangelogTool;
@@ -61,6 +62,8 @@ public static class Registry
                 case PullRequestProvider.Forgejo:
                     var clientFactory = sp.GetRequiredService<IHttpClientFactory>();
                     var client = clientFactory.CreateClient(nameof(ForgejoGitRepositoryClient));
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", options.Value.GithubToken);
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     return new ForgejoGitRepositoryClient(client, options);
                 default:
                     throw new ArgumentOutOfRangeException();
