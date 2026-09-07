@@ -1,4 +1,4 @@
-﻿using SS14.ChangelogTool.Models.GitHub;
+﻿using SS14.ChangelogTool.Models.Generic;
 
 namespace SS14.ChangelogTool.Clients;
 
@@ -12,7 +12,7 @@ public interface INetworkGitRepositoryClient
     /// </summary>
     /// <param name="repo">Repo to inspect, includes both repository name and owner, as '{owner}\{repo}'.</param>
     /// <param name="pullRequestNumbers">List of pull request numbers that we should retrieve.</param>
-    Task<IReadOnlyCollection<GitHubPullRequest>> GetPullRequests(string repo, IReadOnlyCollection<int> pullRequestNumbers);
+    Task<IReadOnlyCollection<GenericPullRequest>> GetPullRequests(string repo, IReadOnlyCollection<int> pullRequestNumbers);
 
     /// <summary>
     /// Returns the set of sha which introduced by the specified <paramref name="repo"/>.

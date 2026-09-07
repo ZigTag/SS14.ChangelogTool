@@ -3,9 +3,9 @@ using Microsoft.Extensions.Options;
 using SS14.ChangelogTool.Clients;
 using SS14.ChangelogTool.LocalGit;
 using SS14.ChangelogTool.LocalGit.Models;
-using SS14.ChangelogTool.Models.GitHub;
 using SS14.ChangelogTool.Options;
 using System.Text.RegularExpressions;
+using SS14.ChangelogTool.Models.Generic;
 
 namespace SS14.ChangelogTool.Services;
 
@@ -39,7 +39,7 @@ public partial class GitHubPullRequestService(
     private static partial Regex AnyNumberRegex();
 
     /// <inheritdoc/>
-    public async Task<GitHubDiff> GetDiff(string sinceSha)
+    public async Task<GenericDiff> GetDiff(string sinceSha)
     {
         var repo = _options.Repo;
         // we first get list of commits since provided point til HEAD
@@ -87,7 +87,7 @@ public partial class GitHubPullRequestService(
         pullRequests = pullRequests.OrderBy(item => item.MergedAt)
                                    .ToList();
 
-        return new GitHubDiff(pullRequests, revertedPullRequestNumbers);
+        return new GenericDiff(pullRequests, revertedPullRequestNumbers);
     }
 
     private PrNumberAndRevertInfo? ExtractPullRequestNumbers(CommitBriefInfo commit)

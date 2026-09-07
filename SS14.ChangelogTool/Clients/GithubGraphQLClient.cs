@@ -2,6 +2,7 @@ using GraphQL;
 using GraphQL.Client.Abstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SS14.ChangelogTool.Models.Generic;
 using SS14.ChangelogTool.Models.GitHub;
 using SS14.ChangelogTool.Options;
 using SS14.ChangelogTool.Utils;
@@ -18,7 +19,7 @@ public class GithubGraphQLClient(
     public const string GithubGraphQLApiBase = "https://api.github.com/graphql";
 
     /// <inheritdoc/>
-    public async Task<IReadOnlyCollection<GitHubPullRequest>> GetPullRequests(
+    public async Task<IReadOnlyCollection<GenericPullRequest>> GetPullRequests(
         string repo,
         IReadOnlyCollection<int> pullRequestNumbers
     )
@@ -30,7 +31,7 @@ public class GithubGraphQLClient(
 
         var batchSize = options.Value.MaxPullRequestEntriesInGraphQLRequest;
 
-        var result = new List<GitHubPullRequest>();
+        var result = new List<GenericPullRequest>();
 
         var prNumberChunk = pullRequestNumbers.Distinct()
                                               .Chunk(batchSize);

@@ -4,6 +4,7 @@ using NSubstitute.ClearExtensions;
 using SS14.ChangelogTool.Clients;
 using SS14.ChangelogTool.LocalGit;
 using SS14.ChangelogTool.LocalGit.Models;
+using SS14.ChangelogTool.Models.Generic;
 using SS14.ChangelogTool.Models.GitHub;
 using SS14.ChangelogTool.Options;
 using SS14.ChangelogTool.Services;
@@ -108,8 +109,8 @@ public class GitHubPullRequestServiceTests
         Assert.Contains(2, diff.PullRequests.Select(x => x.Number));
     }
 
-    private static GitHubPullRequest PullRequestFactory(int pullRequestNumber)
+    private static GenericPullRequest PullRequestFactory(int pullRequestNumber)
     {
-        return new GitHubPullRequest(true, "some-buddy", new GitHubUser("sm1"), new DateTimeOffset(), new GitHubPullRequestBase("ref"), pullRequestNumber, "some-url");
+        return new GenericPullRequest(true, null, "some-buddy", new GenericUser("sm1"), new DateTimeOffset(), new GenericPullRequestBase("ref"), pullRequestNumber, "some-url");
     }
 }

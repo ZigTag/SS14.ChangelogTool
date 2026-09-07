@@ -1,7 +1,6 @@
 using System.Net.Http.Json;
 using Microsoft.Extensions.Options;
-using SS14.ChangelogTool.Models.Forgejo;
-using SS14.ChangelogTool.Models.GitHub;
+using SS14.ChangelogTool.Models.Generic;
 using SS14.ChangelogTool.Options;
 using SS14.ChangelogTool.Utils;
 
@@ -13,16 +12,10 @@ public class ForgejoGitRepositoryClient(HttpClient client, IOptions<ChangelogToo
     private readonly string ForgejoApiBase = $"https://{options.Value.Host}/api/v1";
     
     // We want to cache these from `GetCommitsIntroducedByRepo`
-    private Dictionary<int, GitHubPullRequest> _prCache = [];
+    private Dictionary<int, GenericPullRequest> _prCache = [];
 
-    private static GitHubPullRequest ForgejoToGenericPull(ForgejoPullRequest fjPull)
-    {
-        return new GitHubPullRequest(fjPull.Merged, fjPull.Body, new GitHubUser(fjPull.User.Login), fjPull.MergedAt,
-            new GitHubPullRequestBase(fjPull.Base.Ref), fjPull.Number, fjPull.Html_url);
-    }
-    
     /// <inheritdoc/>
-    public async Task<IReadOnlyCollection<GitHubPullRequest>> GetPullRequests(
+    public async Task<IReadOnlyCollection<GenericPullRequest>> GetPullRequests(
         string repo,
         IReadOnlyCollection<int> pullRequestNumbers
     )
@@ -32,7 +25,7 @@ public class ForgejoGitRepositoryClient(HttpClient client, IOptions<ChangelogToo
 
         var (owner, repository) = GitRepositoryUtils.ExtractParts(repo);
 
-        var result = new List<GitHubPullRequest>();
+        var result = new List<GenericPullRequest>();
 
         foreach (var prNumber in pullRequestNumbers)
         {
@@ -47,7 +40,7 @@ public class ForgejoGitRepositoryClient(HttpClient client, IOptions<ChangelogToo
             if (!resp.IsSuccessStatusCode)
                 continue;
 
-            var contents = await resp.Content.ReadFromJsonAsync<ForgejoPullRequest>();
+            var contents = await resp.Content.ReadFromJsonAsync<GenericPullRequest>();
             
             if (contents is null)
                 continue;
@@ -55,7 +48,7 @@ public class ForgejoGitRepositoryClient(HttpClient client, IOptions<ChangelogToo
             if (!contents.Merged)
                 continue;
             
-            result.Add(ForgejoToGenericPull(contents));
+            result.Add(contents);
         }
         
         return result;
@@ -81,7 +74,7 @@ public class ForgejoGitRepositoryClient(HttpClient client, IOptions<ChangelogToo
             if (!resp.IsSuccessStatusCode)
                 continue;
 
-            var contents = await resp.Content.ReadFromJsonAsync<ForgejoPullRequest>();
+            var contents = await resp.Content.ReadFromJsonAsync<GenericPullRequest>();
             
             if (contents is null)
                 continue;
@@ -89,9 +82,7 @@ public class ForgejoGitRepositoryClient(HttpClient client, IOptions<ChangelogToo
             if (!contents.Merged)
                 continue;
 
-            var ghPr = ForgejoToGenericPull(contents);
-            
-            _prCache.Add(prNumber, ghPr);
+            _prCache.Add(prNumber, contents);
 
             if (sha != contents.Merge_commit_sha)
                 continue;

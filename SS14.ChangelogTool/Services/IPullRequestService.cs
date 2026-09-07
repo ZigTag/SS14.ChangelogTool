@@ -1,4 +1,4 @@
-using SS14.ChangelogTool.Models.GitHub;
+using SS14.ChangelogTool.Models.Generic;
 
 namespace SS14.ChangelogTool.Services;
 
@@ -11,5 +11,5 @@ public interface IPullRequestService
     /// Gets the diff (new pull requests and reverted pull request numbers) since the provided commit hash.
     /// Repo is set by app settings.
     /// </summary>
-    Task<GitHubDiff> GetDiff(string sinceSha);
+    Task<GenericDiff> GetDiff(string sinceSha);
 }
