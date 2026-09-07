@@ -13,7 +13,14 @@ public class ForgejoGitRepositoryClient(HttpClient client, IOptions<ChangelogToo
     private readonly string ForgejoApiBase = $"https://{options.Value.Host}/api/v1";
     
     // We want to cache these from `GetCommitsIntroducedByRepo`
-    private Dictionary<int, GenericPullRequest> _prCache = [];
+    private Dictionary<int, ForgejoPullRequest> _prCache = [];
+    
+    // For some reason doing this in the constructor doesn't work correctly with Html_url
+    private static GenericPullRequest ForgejoToGenericPull(ForgejoPullRequest fjPull)
+    {
+        return new GenericPullRequest(fjPull.Merged, fjPull.Body, fjPull.User, fjPull.MergedAt,
+            fjPull.Base, fjPull.Number, fjPull.Html_url);
+    }
 
     /// <inheritdoc/>
     public async Task<IReadOnlyCollection<GenericPullRequest>> GetPullRequests(
@@ -32,7 +39,7 @@ public class ForgejoGitRepositoryClient(HttpClient client, IOptions<ChangelogToo
         {
             if (_prCache.TryGetValue(prNumber, out var pr))
             {
-                result.Add(pr);
+                result.Add(ForgejoToGenericPull(pr));
                 continue;
             }
             
@@ -49,7 +56,7 @@ public class ForgejoGitRepositoryClient(HttpClient client, IOptions<ChangelogToo
             if (!contents.Merged)
                 continue;
             
-            result.Add(contents);
+            result.Add(ForgejoToGenericPull(contents));
         }
         
         return result;
@@ -87,7 +94,7 @@ public class ForgejoGitRepositoryClient(HttpClient client, IOptions<ChangelogToo
 
             if (sha != contents.Merge_commit_sha)
                 continue;
-            
+
             result.Add(sha);
         }
         

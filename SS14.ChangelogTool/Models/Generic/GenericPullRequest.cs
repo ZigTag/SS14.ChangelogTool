@@ -1,6 +1,6 @@
 ﻿namespace SS14.ChangelogTool.Models.Generic;
 
-// These can be used with both GitHub and Forgejo
+// This can be used with GitHub directly, and Forgejo just redirects some fields to fit this standard.
 public record GenericPullRequest(
     bool Merged,
     string? Body,

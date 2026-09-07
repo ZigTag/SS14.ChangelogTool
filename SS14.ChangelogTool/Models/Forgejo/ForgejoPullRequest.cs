@@ -11,4 +11,4 @@ public record ForgejoPullRequest(
     GenericPullRequestBase? Base,
     int Number,
     string Html_url
-) : GenericPullRequest(Merged, Body, User, MergedAt, Base, Number, Html_url);
+); // : GenericPullRequest(Merged, Body, User, MergedAt, Base, Number, Html_url); This doesn't seem to work with the Html_url
