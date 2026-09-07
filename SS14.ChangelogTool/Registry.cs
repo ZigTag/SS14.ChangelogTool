@@ -31,6 +31,11 @@ public static class Registry
             .ValidateOnStart();
 
         services.AddSingleton<IValidateOptions<ChangelogToolOptions>, ChangelogToolOptionsValidator>();
+        
+        var options = configuration.Get<ChangelogToolOptions>();
+
+        if (options is null)
+            throw new KeyNotFoundException();
 
         services.AddLogging(builder =>
         {
@@ -48,27 +53,17 @@ public static class Registry
         
         # region Pull Request Clients
         
-        services.AddSingleton<INetworkGitRepositoryClient>(sp =>
+        switch (options.PrProvider)
         {
-            var options = sp.GetRequiredService<IOptions<ChangelogToolOptions>>();
-
-            switch (options.Value.PrProvider)
-            {
-                case PullRequestProvider.GitHub:
-                    var graphql = sp.GetRequiredService<IGraphQLClient>();
-                    var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
-                    var logger = loggerFactory.CreateLogger<GithubGraphQLClient>();
-                    return new GithubGraphQLClient(graphql, options, logger);
-                case PullRequestProvider.Forgejo:
-                    var clientFactory = sp.GetRequiredService<IHttpClientFactory>();
-                    var client = clientFactory.CreateClient(nameof(ForgejoGitRepositoryClient));
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", options.Value.GithubToken);
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    return new ForgejoGitRepositoryClient(client, options);
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        });
+            case PullRequestProvider.GitHub:
+                services.AddSingleton<INetworkGitRepositoryClient, GithubGraphQLClient>();
+                break;
+            case PullRequestProvider.Forgejo:
+                services.AddSingleton<INetworkGitRepositoryClient, ForgejoGitRepositoryClient>();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
         
         # endregion
 
