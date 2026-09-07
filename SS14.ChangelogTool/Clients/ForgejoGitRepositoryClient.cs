@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using Microsoft.Extensions.Options;
+using SS14.ChangelogTool.Models.Forgejo;
 using SS14.ChangelogTool.Models.Generic;
 using SS14.ChangelogTool.Options;
 using SS14.ChangelogTool.Utils;
@@ -40,7 +41,7 @@ public class ForgejoGitRepositoryClient(HttpClient client, IOptions<ChangelogToo
             if (!resp.IsSuccessStatusCode)
                 continue;
 
-            var contents = await resp.Content.ReadFromJsonAsync<GenericPullRequest>();
+            var contents = await resp.Content.ReadFromJsonAsync<ForgejoPullRequest>();
             
             if (contents is null)
                 continue;
@@ -74,7 +75,7 @@ public class ForgejoGitRepositoryClient(HttpClient client, IOptions<ChangelogToo
             if (!resp.IsSuccessStatusCode)
                 continue;
 
-            var contents = await resp.Content.ReadFromJsonAsync<GenericPullRequest>();
+            var contents = await resp.Content.ReadFromJsonAsync<ForgejoPullRequest>();
             
             if (contents is null)
                 continue;

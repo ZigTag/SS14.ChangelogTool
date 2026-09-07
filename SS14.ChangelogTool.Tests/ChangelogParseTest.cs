@@ -28,7 +28,7 @@ public class ChangelogParseTest
                             """;
 
         var time = new DateTimeOffset(2021, 1, 1, 1, 1, 1, TimeSpan.Zero);
-        var pr = new GenericPullRequest(true,  null, text, new GenericUser("PJB"), time, new GenericPullRequestBase("master"), 123,
+        var pr = new GenericPullRequest(true,  text, new GenericUser("PJB"), time, new GenericPullRequestBase("master"), 123,
             "https://www.example.com");
         IReadOnlyCollection<string> extraCategories = [];
         var parsed = Services.ChangelogParserService.ParsePrBody(pr, extraCategories);
@@ -59,7 +59,7 @@ public class ChangelogParseTest
                             """;
 
         var time = new DateTimeOffset(2021, 1, 1, 1, 1, 1, TimeSpan.Zero);
-        var pr = new GenericPullRequest(true, null, text, new GenericUser("Swept"), time, new GenericPullRequestBase("master"), 123,
+        var pr = new GenericPullRequest(true, text, new GenericUser("Swept"), time, new GenericPullRequestBase("master"), 123,
             "https://www.example.com");
         IReadOnlyCollection<string> extraCategories = [];
         var parsed = Services.ChangelogParserService.ParsePrBody(pr, extraCategories);
@@ -87,7 +87,7 @@ public class ChangelogParseTest
 
         var time = new DateTimeOffset(2021, 1, 1, 1, 1, 1, TimeSpan.Zero);
         // GitHub returns "author: null" for PRs whose author account was deleted (User deserializes to null).
-        var pr = new GenericPullRequest(true, null, text, null, time, new GenericPullRequestBase("master"), 123,
+        var pr = new GenericPullRequest(true, text, null, time, new GenericPullRequestBase("master"), 123,
             "https://www.example.com");
         IReadOnlyCollection<string> extraCategories = [];
         var parsed = Services.ChangelogParserService.ParsePrBody(pr, extraCategories);
@@ -115,7 +115,7 @@ public class ChangelogParseTest
                             """;
 
         var time = new DateTimeOffset(2021, 1, 1, 1, 1, 1, TimeSpan.Zero);
-        var pr = new GenericPullRequest(true, null, text, new GenericUser("Swept"), time, new GenericPullRequestBase("master"), 123,
+        var pr = new GenericPullRequest(true, text, new GenericUser("Swept"), time, new GenericPullRequestBase("master"), 123,
             "https://www.example.com");
         IReadOnlyCollection<string> extraCategories = [];
         var parsed = Services.ChangelogParserService.ParsePrBody(pr, extraCategories);
@@ -137,7 +137,7 @@ public class ChangelogParseTest
             "Makes it possible to repair things with a welder.\r\n\r\n**Changelog**\r\n:cl: AJCM\r\n- add: Makes gravity generator and windows repairable with a lit welding tool \r\n\r\n";
 
         var time = new DateTimeOffset(2021, 1, 1, 1, 1, 1, TimeSpan.Zero);
-        var pr = new GenericPullRequest(true, null, text, new GenericUser("AJCM-Git"), time, new GenericPullRequestBase("master"), 123,
+        var pr = new GenericPullRequest(true, text, new GenericUser("AJCM-Git"), time, new GenericPullRequestBase("master"), 123,
             "https://www.example.com");
         IReadOnlyCollection<string> extraCategories = [];
         var parsed = Services.ChangelogParserService.ParsePrBody(pr, extraCategories);
@@ -166,7 +166,7 @@ public class ChangelogParseTest
                             """;
 
         var time = new DateTimeOffset(2021, 1, 1, 1, 1, 1, TimeSpan.Zero);
-        var pr = new GenericPullRequest(true, null, text, new GenericUser("Swept"), time, new GenericPullRequestBase("master"), 123,
+        var pr = new GenericPullRequest(true, text, new GenericUser("Swept"), time, new GenericPullRequestBase("master"), 123,
             "https://www.example.com");
         IReadOnlyCollection<string> extraCategories = [];
         var parsed = Services.ChangelogParserService.ParsePrBody(pr, extraCategories);
@@ -200,7 +200,7 @@ public class ChangelogParseTest
                             """;
 
         var time = new DateTimeOffset(2021, 1, 1, 1, 1, 1, TimeSpan.Zero);
-        var pr = new GenericPullRequest(true, null, text, new GenericUser("Swept"), time, new GenericPullRequestBase("master"), 123,
+        var pr = new GenericPullRequest(true, text, new GenericUser("Swept"), time, new GenericPullRequestBase("master"), 123,
             "https://www.example.com");
         IReadOnlyCollection<string> extraCategories = ["Admin"];
         var parsed = Services.ChangelogParserService.ParsePrBody(pr, extraCategories);
@@ -237,7 +237,7 @@ public class ChangelogParseTest
                             """;
 
         var time = new DateTimeOffset(2021, 1, 1, 1, 1, 1, TimeSpan.Zero);
-        var pr = new GenericPullRequest(true, null, text, new GenericUser("Swept"), time, new GenericPullRequestBase("master"), 123,
+        var pr = new GenericPullRequest(true, text, new GenericUser("Swept"), time, new GenericPullRequestBase("master"), 123,
             "https://www.example.com");
         IReadOnlyCollection<string> extraCategories = ["Admin"];
         var parsed = Services.ChangelogParserService.ParsePrBody(pr, extraCategories);

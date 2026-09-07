@@ -6,7 +6,6 @@ using Microsoft.Extensions.Options;
 using NSubstitute;
 using SS14.ChangelogTool.LocalGit;
 using SS14.ChangelogTool.LocalGit.Models;
-using SS14.ChangelogTool.Models.GitHub;
 using SS14.ChangelogTool.Options;
 using SS14.ChangelogTool.Services;
 using SS14.ChangelogTool.Tests.TestInfrastructure;
@@ -48,7 +47,6 @@ public class EndToEndPipelineTest(ITestOutputHelper outputHelper) : IDisposable
                      [
                          new GenericPullRequest(
                              Merged: true,
-                             null,
                              """
                              Adds the cool feature!
  
@@ -138,7 +136,6 @@ public class EndToEndPipelineTest(ITestOutputHelper outputHelper) : IDisposable
                      [
                          new GenericPullRequest(
                              Merged: true,
-                             null,
                              """
                              Adds the cool feature!
  
@@ -221,7 +218,6 @@ public class EndToEndPipelineTest(ITestOutputHelper outputHelper) : IDisposable
                  .Returns(new GenericDiff(
                      [
                          new GenericPullRequest(true,
-                             null,
                              ":cl: \n- add: Fresh new entry",
                              new GenericUser("NewUser"),
                              new DateTimeOffset(new DateTime(2022,12,5,12,3,5), TimeSpan.Zero),
@@ -320,7 +316,6 @@ public class EndToEndPipelineTest(ITestOutputHelper outputHelper) : IDisposable
                      [
                          new GenericPullRequest(
                              Merged: true,
-                             null,
                              """
                              Multi-category PR!
 
@@ -424,7 +419,6 @@ public class EndToEndPipelineTest(ITestOutputHelper outputHelper) : IDisposable
                      [
                          new GenericPullRequest(
                              Merged: true,
-                             null,
                              """
                              This PR has no changelog header at all.
                              Just some regular description.
@@ -483,7 +477,6 @@ public class EndToEndPipelineTest(ITestOutputHelper outputHelper) : IDisposable
                      [
                          new GenericPullRequest(
                              Merged: true,
-                             null,
                              """
                              Big update with many changes!
 
@@ -546,7 +539,6 @@ public class EndToEndPipelineTest(ITestOutputHelper outputHelper) : IDisposable
                      [
                          new GenericPullRequest(
                              Merged: true,
-                             null,
                              """
                              Big update with many changes!
 
@@ -674,7 +666,6 @@ public class EndToEndPipelineTest(ITestOutputHelper outputHelper) : IDisposable
                 [
                     new GenericPullRequest(
                         Merged: true,
-                        null,
                         """
                         A PR with a cool changelog!
 
@@ -730,7 +721,6 @@ public class EndToEndPipelineTest(ITestOutputHelper outputHelper) : IDisposable
                 [
                     new GenericPullRequest(
                         Merged: true,
-                        null,
                         """
                         PR with main and admin changes
 

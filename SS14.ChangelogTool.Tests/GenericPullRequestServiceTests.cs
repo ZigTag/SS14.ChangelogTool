@@ -110,6 +110,6 @@ public class GenericPullRequestServiceTests
 
     private static GenericPullRequest PullRequestFactory(int pullRequestNumber)
     {
-        return new GenericPullRequest(true, null, "some-buddy", new GenericUser("sm1"), new DateTimeOffset(), new GenericPullRequestBase("ref"), pullRequestNumber, "some-url");
+        return new GenericPullRequest(true, "some-buddy", new GenericUser("sm1"), new DateTimeOffset(), new GenericPullRequestBase("ref"), pullRequestNumber, "some-url");
     }
 }
