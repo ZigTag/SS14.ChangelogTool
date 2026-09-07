@@ -43,7 +43,7 @@ public static class Registry
         });
         services.AddSingleton<IChangelogFileManager, ChangelogFileManager>();
         services.AddSingleton<IPullRequestParserService, ChangelogParserService>();
-        services.AddSingleton<IPullRequestService, GitHubPullRequestService>();
+        services.AddSingleton<IPullRequestService, GenericPullRequestService>();
         services.AddSingleton<ILocalGitRepository, LocalGitRepository>();
         
         # region Pull Request Clients

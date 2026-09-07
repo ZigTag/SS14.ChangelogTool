@@ -5,13 +5,12 @@ using SS14.ChangelogTool.Clients;
 using SS14.ChangelogTool.LocalGit;
 using SS14.ChangelogTool.LocalGit.Models;
 using SS14.ChangelogTool.Models.Generic;
-using SS14.ChangelogTool.Models.GitHub;
 using SS14.ChangelogTool.Options;
 using SS14.ChangelogTool.Services;
 
 namespace SS14.ChangelogTool.Tests;
 
-public class GitHubPullRequestServiceTests
+public class GenericPullRequestServiceTests
 {
     private readonly ChangelogToolOptions _changelogToolOptions = new()
     {
@@ -26,9 +25,9 @@ public class GitHubPullRequestServiceTests
 
     private readonly INetworkGitRepositoryClient _client;
     private readonly ILocalGitRepository _repository;
-    private readonly GitHubPullRequestService _cut;
+    private readonly GenericPullRequestService _cut;
 
-    public GitHubPullRequestServiceTests()
+    public GenericPullRequestServiceTests()
     {
         _client = Substitute.For<INetworkGitRepositoryClient>();
         _repository = Substitute.For<ILocalGitRepository>();
@@ -36,11 +35,11 @@ public class GitHubPullRequestServiceTests
         _client.GetPullRequests(Arg.Any<string>(), Arg.Any<IReadOnlyCollection<int>>())
                .Returns([]);
 
-        _cut = new GitHubPullRequestService(
+        _cut = new GenericPullRequestService(
             _client,
             _repository,
             Microsoft.Extensions.Options.Options.Create(_changelogToolOptions),
-            NullLogger<GitHubPullRequestService>.Instance
+            NullLogger<GenericPullRequestService>.Instance
         );
     }
 
